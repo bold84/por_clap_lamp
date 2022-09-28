@@ -36,6 +36,24 @@ void TriacDimmer::resetZeroCross()
   this->zeroCross_ = false;
 }
 
+int TriacDimmer::getDimPercentage()
+{
+  return this->map(this->psmDuration_, MIN_PSM_DURATION, MAX_PSM_DURATION, 0, 100);
+}
+
+void TriacDimmer::setDimPercentage(uint8_t dimPercentage)
+{
+  if(dimPercentage > 100)
+  {
+    dimPercentage = 100;
+  }
+  else if(dimPercentage < 0)
+  {
+    dimPercentage = 0;
+  }
+  this->psmDuration_ = this->map(dimPercentage, 0, 100, MIN_PSM_DURATION, MAX_PSM_DURATION);
+}
+
 int TriacDimmer::getPsmDuration() const
 {
   return this->psmDuration_;
@@ -67,4 +85,9 @@ void TriacDimmer::dim()
     sleep_us(8.333);
     gpio_put(this->psmPin_, 0);
   }
+}
+
+int TriacDimmer::map(int x, int in_min, int in_max, int out_min, int out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

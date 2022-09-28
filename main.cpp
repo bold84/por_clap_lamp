@@ -1,18 +1,19 @@
 
 #include <iostream>
 #include <chrono>
+#include <iomanip>
+#include <sstream>
 
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 
 #include "TriacDimmer.h"
+#include "date.h"
 
 #define ZEROCROSS_PIN 16
 #define PSM_PIN 17
 #define SOUND_SENSOR_PIN 15
 
-#define MAX_PSM_DURATION 7500
-#define MIN_PSM_DURATION 4500
 
 #define CLAP_TIMEOUT_MS 1000 // 1 second
 
@@ -60,6 +61,8 @@ void gpio_event_string(char *buf, uint32_t events) {
 //   printf("Clap no.: %d\n", ++clap_count);
 // }
 
+
+
 int main(int argc, char **argv) 
 {
   stdio_init_all();
@@ -84,29 +87,48 @@ int main(int argc, char **argv)
     
     int dim = 200;
     bool direction = false;
-    int step = 50;
+    int step = 5;
+    
+    sleep_ms(5000);
+    std::cout << "Starting dimming..." << std::endl;
+
+    auto lastIncrease = get_absolute_time();
+    
     while(1)
     {
 
       dimmer.dim();
       
-      if(direction)
-      {
-        dimmer.setPsmDuration(dimmer.getPsmDuration() + step);
-        if(dimmer.getPsmDuration() >= MAX_PSM_DURATION)
-        {
-          direction = false;
-        }
-      }
-      else
-      {
-        dimmer.setPsmDuration(dimmer.getPsmDuration() - step);
-        if(dimmer.getPsmDuration() <= MIN_PSM_DURATION)
-        {
-          direction = true;
-        }
+      // if(direction)
+      // {
+      //   dimmer.setPsmDuration(dimmer.getPsmDuration() + step);
+      //   if(dimmer.getPsmDuration() >= MAX_PSM_DURATION)
+      //   {
+      //     direction = false;
+      //     std::cout << "Dimming down" << std::endl;
+      //   }
+      // }
+      // else
+      // {
+      //   dimmer.setPsmDuration(dimmer.getPsmDuration() - step);
+      //   if(dimmer.getPsmDuration() <= MIN_PSM_DURATION)
+      //   {
+      //     direction = true;
+      //     std::cout << "Dimming up" << std::endl;
+      //   }
       
+      // }
+      
+      
+      if(absolute_time_diff_us(delayed_by_ms(lastIncrease, 1000), get_absolute_time()) > 1000000)
+      {
+        //dimmer.setPsmDuration(dimmer.getPsmDuration() + 200);
+        dimmer.setDimPercentage(dimmer.getDimPercentage() + 5);
+        lastIncrease = get_absolute_time();
+        std::cout << "Dimming up - " << dimmer.getPsmDuration() << std::endl;
       }
+
+      
       
       // if(zero_cross)
       // {
