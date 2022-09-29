@@ -1,6 +1,3 @@
-
-#include <functional> // for std::function
-
 #include "pico/stdlib.h" // for sleep_ms
 #include "hardware/gpio.h" // for gpio_set_irq_enabled_with_callback and GPIO_IRQ_EDGE_FALL, etc.
 

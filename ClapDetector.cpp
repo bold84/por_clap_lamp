@@ -1,6 +1,3 @@
-
-#include <functional>
-
 #include <pico/stdlib.h>
 #include <hardware/gpio.h>
 
