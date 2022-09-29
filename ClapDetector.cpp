@@ -6,16 +6,14 @@
 
 #include "ClapDetector.h"
 
-
-
-// Constructor for the ClapDetector class.
+/**
+ * @brief Constructor for the ClapDetector class.
+ * 
+ * @param soundSensorPin The GPIO pin number for the sound sensor.
+ */
 ClapDetector::ClapDetector(int soundSensorPin)
   : soundSensorPin_(soundSensorPin)
 {
-  // Set the callback function for the clap detector.
-  //ClapCallback<void(uint, uint32_t)>::func = std::bind(&ClapDetector::clapCallback, this, std::placeholders::_1, std::placeholders::_2);
-  // Enable the interrupt for the sound sensor pin.
-  //gpio_set_irq_enabled_with_callback(this->soundSensorPin_, GPIO_IRQ_EDGE_FALL, true, ClapCallback<void(uint, uint32_t)>::callback);
 }
 
 void ClapDetector::clapCallback(uint gpio, uint32_t events)

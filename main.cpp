@@ -2,23 +2,29 @@
 #include <iostream>
 #include <functional>
 
-#include "hardware/gpio.h"
 #include "pico/stdlib.h"
+#include "hardware/gpio.h"
 
 #include "TriacDimmer.h"
 #include "ClapDetector.h"
 
-#define ZEROCROSS_PIN 16
-#define PSM_PIN 17
-#define SOUND_SENSOR_PIN 15
+#define ZEROCROSS_PIN 16                              // GPIO16, connected to the zero cross detector (ZCD) output.
+#define PSM_PIN 17                                    // GPIO17, connected to the PSM input of the triac.
+#define SOUND_SENSOR_PIN 15                           // GPIO15, connected to the sound sensor output.
 
-#define CLAP_TIMEOUT_MS 1000 // 1 second
-#define CLAP_MAX_DURATION_MS 100 // 100 ms
+static TriacDimmer dimmer(PSM_PIN);                   // Create a TriacDimmer object.
 
-static TriacDimmer dimmer(PSM_PIN);
+static ClapDetector clapDetector(SOUND_SENSOR_PIN);   // Create a ClapDetector object.
 
-static ClapDetector clapDetector(SOUND_SENSOR_PIN);
-
+/**
+ * @brief IRQ callback function.
+ * 
+ * This function is called when an interrupt occurs for either
+ * the zero cross pin or the sound sensor pin.
+ * 
+ * @param gpio The GPIO pin number.
+ * @param events The GPIO events.
+ */
 void gpioCallback(uint gpio, uint32_t events)
 {
   if(gpio == ZEROCROSS_PIN)
@@ -35,27 +41,16 @@ int main(int argc, char **argv)
 {
   stdio_init_all();
   
-//  dimmer.setDimPercentage(100);
-
+  // Set the GPIO pin for the zero cross detector and the IRQ callback function.
   gpio_set_irq_enabled_with_callback(ZEROCROSS_PIN, GPIO_IRQ_EDGE_RISE, true, gpioCallback);
+  
+  // Set the GPIO pin for the sound sensor 
   gpio_set_irq_enabled(SOUND_SENSOR_PIN, GPIO_IRQ_EDGE_FALL, true);
 
-  sleep_ms(5000);
-  std::cout << "Starting dimming..." << std::endl;
-
-  auto lastIncrease = get_absolute_time();
+  // Loop forever.  
   while (1)
-  {
-
-    // dimmer.dim();
-    // if (absolute_time_diff_us(delayed_by_ms(lastIncrease, 1000), get_absolute_time()) > 1000000)
-    // {
-    //   dimmer.setDimPercentage(dimmer.getDimPercentage() + 5);
-    //   lastIncrease = get_absolute_time();
-    //   std::cout << "Dimming up - " << dimmer.getPsmDuration() << std::endl;
-    // }
-    
-    
+  {    
+    // Dim the light.
     dimmer.dim();
     
     // Check if the clap detector has detected a clap.
@@ -83,8 +78,6 @@ int main(int argc, char **argv)
         dimmer.setPowerState(!dimmer.getPowerState());
       }
     }
-
   }
-
   return 0;
 }
