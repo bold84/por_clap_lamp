@@ -1,11 +1,11 @@
 
-#include <iostream>
+#include <iostream>           // for cout
 
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
+#include "pico/stdlib.h"      // for sleep_ms, etc.
+#include "hardware/gpio.h"    // for gpio_set_irq_enabled_with_callback, etc.
 
-#include "TriacDimmer.h"
-#include "ClapDetector.h"
+#include "TriacDimmer.h"      // for TriacDimmer class definition
+#include "ClapDetector.h"     // for ClapDetector class definition
 
 #define ZEROCROSS_PIN 16                              // GPIO16, connected to the zero cross detector (ZCD) output.
 #define PSM_PIN 17                                    // GPIO17, connected to the PSM input of the triac.

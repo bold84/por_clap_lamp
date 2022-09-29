@@ -1,8 +1,8 @@
 #ifndef _TRIAC_DIMMER_H_
 #define _TRIAC_DIMMER_H_
 
-#define MIN_PSM_DURATION 4600
-#define MAX_PSM_DURATION 8200
+#define MIN_PSM_DURATION 4600   // Minimum PSM duration in microseconds.
+#define MAX_PSM_DURATION 8200   // Maximum PSM duration in microseconds.
 
 /**
  * @brief Class for controlling a triac dimmer.
@@ -16,10 +16,18 @@
 class TriacDimmer
 {
 public:
-  // Constructor.
+  
+  /**
+   * @brief Constructor.
+   * 
+   * @param psmPin The GPIO pin number for the PSM signal.
+   */
   TriacDimmer(int psmPin);
   
-  // Destructor.
+  /**
+   * @brief Destructor.
+   * 
+   */
   ~TriacDimmer() = default;
   
   /**
@@ -80,6 +88,12 @@ public:
    */
   void setPsmDuration(int psmDuration);
   
+  /**
+   * @brief Get the power state
+   * 
+   * @return true 
+   * @return false 
+   */
   bool getPowerState() const;
   
   /**
@@ -114,9 +128,9 @@ private:
 
   int zeroCrossPin_ { 0 };                      // The pin that is connected to the zero cross detector.
   int psmPin_ { 0 };                            // The pin that is connected to the PSM.
-  int psmDuration_ { MIN_PSM_DURATION };                    // The duration of the PSM in microseconds.
+  int psmDuration_ { MIN_PSM_DURATION };        // The duration of the PSM in microseconds.
   volatile bool zeroCross_ { false };           // Flag that indicates if a zero cross has been detected.
-  bool powerState_ { true };                      // Flag that indicates if the light is on or off.
+  bool powerState_ { true };                    // Flag that indicates if the light is on or off.
   
   /**
    * @brief Map a value from one range to another.

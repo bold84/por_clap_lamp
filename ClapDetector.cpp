@@ -1,7 +1,6 @@
-#include <pico/stdlib.h>
-#include <hardware/gpio.h>
+#include <pico/stdlib.h>          // for sleep_ms, etc.
 
-#include "ClapDetector.h"
+#include "ClapDetector.h"         // for ClapDetector class definition
 
 /**
  * @brief Constructor for the ClapDetector class.
