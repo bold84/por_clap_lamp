@@ -12,6 +12,7 @@ project(PicoTest VERSION 1.0.0)
 # Link the Project to a source file (step 4.6)
 add_executable(PicoTest 
   TriacDimmer.cpp
+  ClapDetector.cpp
   main.cpp
   
 )

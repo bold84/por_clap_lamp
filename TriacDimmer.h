@@ -4,33 +4,108 @@
 #define MIN_PSM_DURATION 4600
 #define MAX_PSM_DURATION 8200
 
+/**
+ * @brief Class for controlling a triac dimmer.
+ * 
+ * This class is used to control a triac dimmer. It uses the Pico's hardware timer to
+ * generate a zero cross signal. The zero cross signal is used to trigger the triac.
+ * The Pico's hardware timer is also used to generate the PSM signal. The PSM signal
+ * is used to control the triac's firing angle.
+ * 
+ */
 class TriacDimmer
 {
 public:
+  // Constructor.
   TriacDimmer(int zeroCrossPin, int psmPin);
+  
+  // Destructor.
   ~TriacDimmer() = default;
   
+  /**
+   * @brief Dim the light.
+   * 
+   * This method is used to reset the zero cross flag.
+   * 
+   */
   void resetZeroCross();
   
+  /**
+   * @brief Get the dim percentage.
+   * 
+   * This method is used to get the dim percentage.
+   * 
+   * @return int The dim percentage.
+   */
   int getDimPercentage();
+  
+  /**
+   * @brief Set the dim percentage.
+   * 
+   * This method is used to set the dim percentage.
+   * 
+   * @param dimPercentage The dim percentage.
+   */
   void setDimPercentage(uint8_t dimPercentage);
   
+  /**
+   * @brief Get the PSM duration.
+   * 
+   * This method is used to get the PSM duration.
+   * 
+   * @return int The PSM duration
+   */
   int getPsmDuration() const;
+  
+  /**
+   * @brief Set the PSM duration.
+   * 
+   * This method is used to set the PSM duration.
+   * 
+   * @param psmDuration The PSM duration.
+   */
   void setPsmDuration(int psmDuration);
   
+  /**
+   * @brief Dim the light.
+   * 
+   * This method is used to dim the light.
+   * 
+   */
   void dim();
   
 private:
-  int zeroCrossPin_ { 0 };
-  int psmPin_ { 0 };
-  int psmDuration_ { 4500 };
-  volatile bool zeroCross_ { false };
+
+  int zeroCrossPin_ { 0 };                      // The pin that is connected to the zero cross detector.
+  int psmPin_ { 0 };                            // The pin that is connected to the PSM.
+  int psmDuration_ { MIN_PSM_DURATION };                    // The duration of the PSM in microseconds.
+  volatile bool zeroCross_ { false };           // Flag that indicates if a zero cross has been detected.
   
+  /**
+   * @brief Map a value from one range to another.
+   * 
+   * This is the callback function that is called when a zero cross is detected.
+   * 
+   * @param gpio The GPIO pin that triggered the callback.
+   * @param events The events that triggered the callback.
+   */
   void zeroCrossCallback(uint gpio, uint32_t events)
   {
     this->zeroCross_ = true;
   }
   
+  /**
+   * @brief Map a value from one range to another.
+   * 
+   * This method is used to map a value from one range to another.
+   * 
+   * @param x The value to map.
+   * @param in_min The minimum value of the input range.
+   * @param in_max The maximum value of the input range.
+   * @param out_min The minimum value of the output range.
+   * @param out_max The maximum value of the output range.
+   * @return int The mapped value.
+   */
   int map(int x, int in_min, int in_max, int out_min, int out_max);
   
 };
