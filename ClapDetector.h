@@ -31,6 +31,7 @@ public:
   
   int getClapCount();
 
+  void clapCallback(uint gpio, uint32_t events);
   
   
 private:
@@ -42,7 +43,6 @@ private:
   int clapCount_ { 0 };
   
   
-  void clapCallback(uint gpio, uint32_t events);
   
   
 };

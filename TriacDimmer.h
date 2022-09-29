@@ -17,7 +17,7 @@ class TriacDimmer
 {
 public:
   // Constructor.
-  TriacDimmer(int zeroCrossPin, int psmPin);
+  TriacDimmer(int psmPin);
   
   // Destructor.
   ~TriacDimmer() = default;
@@ -97,14 +97,6 @@ public:
    */
   void dim();
   
-private:
-
-  int zeroCrossPin_ { 0 };                      // The pin that is connected to the zero cross detector.
-  int psmPin_ { 0 };                            // The pin that is connected to the PSM.
-  int psmDuration_ { MIN_PSM_DURATION };                    // The duration of the PSM in microseconds.
-  volatile bool zeroCross_ { false };           // Flag that indicates if a zero cross has been detected.
-  bool powerState_ { true };                      // Flag that indicates if the light is on or off.
-  
   /**
    * @brief Map a value from one range to another.
    * 
@@ -117,6 +109,14 @@ private:
   {
     this->zeroCross_ = true;
   }
+  
+private:
+
+  int zeroCrossPin_ { 0 };                      // The pin that is connected to the zero cross detector.
+  int psmPin_ { 0 };                            // The pin that is connected to the PSM.
+  int psmDuration_ { MIN_PSM_DURATION };                    // The duration of the PSM in microseconds.
+  volatile bool zeroCross_ { false };           // Flag that indicates if a zero cross has been detected.
+  bool powerState_ { true };                      // Flag that indicates if the light is on or off.
   
   /**
    * @brief Map a value from one range to another.
