@@ -9,14 +9,41 @@ public:
   ~ClapDetector() = default;
   
   
+  /**
+   * @brief Get the clap sequence timeout.
+   * 
+   * This method is used to get the clap sequence timeout.
+   * 
+   * @return int The clap sequence timeout.
+   */
+  int getClapSequenceTimeout() const;
+  
+  /**
+   * @brief Set the clap sequence timeout.
+   * 
+   * This method is used to set the clap sequence timeout.
+   * 
+   * @param clapSequenceTimeout The clap sequence timeout.
+   */
+  void setClapSequenceTimeout(int clapSequenceTimeout);
+  
+
+  
+  int getClapCount();
+
+  
+  
 private:
 
   int soundSensorPin_ { 0 };
+  int clapDebounceTime_ { 100 }; // 100 ms
+  int clapSequenceTimeout_ { 1000 }; // 1 second
+  uint32_t lastClapTime_ { 0 };
+  int clapCount_ { 0 };
   
-  void clapCallback(uint gpio, uint32_t events)
-  {
-    
-  }
+  
+  void clapCallback(uint gpio, uint32_t events);
+  
   
 };
 

@@ -49,6 +49,20 @@ public:
   void setDimPercentage(uint8_t dimPercentage);
   
   /**
+   * @brief Increase the dim percentage.
+   * 
+   * @param increasePct 
+   */
+  void increaseDimPercentage(int increasePct = 20);
+  
+  /**
+   * @brief Decrease the dim percentage.
+   * 
+   * @param descreasePct 
+   */
+  void decreaseDimPercentage(int descreasePct = 20);
+  
+  /**
    * @brief Get the PSM duration.
    * 
    * This method is used to get the PSM duration.
@@ -66,6 +80,15 @@ public:
    */
   void setPsmDuration(int psmDuration);
   
+  bool getPowerState() const;
+  
+  /**
+   * @brief Set power on or off.
+   * 
+   * @param power 
+   */
+  void setPowerState(bool power);
+  
   /**
    * @brief Dim the light.
    * 
@@ -80,6 +103,7 @@ private:
   int psmPin_ { 0 };                            // The pin that is connected to the PSM.
   int psmDuration_ { MIN_PSM_DURATION };                    // The duration of the PSM in microseconds.
   volatile bool zeroCross_ { false };           // Flag that indicates if a zero cross has been detected.
+  bool powerState_ { true };                      // Flag that indicates if the light is on or off.
   
   /**
    * @brief Map a value from one range to another.

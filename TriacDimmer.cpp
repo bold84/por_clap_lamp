@@ -65,6 +65,18 @@ void TriacDimmer::setDimPercentage(uint8_t dimPercentage)
   this->psmDuration_ = this->map(dimPercentage, 0, 100, MIN_PSM_DURATION, MAX_PSM_DURATION);
 }
 
+void TriacDimmer::increaseDimPercentage(int increasePct)
+{
+  // Increase the dim percentage by increasePct%.
+  this->setDimPercentage(this->getDimPercentage() + increasePct);
+}
+
+void TriacDimmer::decreaseDimPercentage(int descreasePct)
+{
+  // Decrease the dim percentage by descreasePct%.
+  this->setDimPercentage(this->getDimPercentage() - descreasePct);
+}
+
 int TriacDimmer::getPsmDuration() const
 {
   // Return the PSM duration.
@@ -85,6 +97,24 @@ void TriacDimmer::setPsmDuration(int psmDuration)
   else
   {
     this->psmDuration_ = psmDuration;
+  }
+}
+
+bool TriacDimmer::getPowerState() const
+{
+  // Return the power state.
+  return this->powerState_;
+}
+
+void TriacDimmer::setPowerState(bool power)
+{
+  // Set the power state.
+  this->powerState_ = power;
+  
+  // If the power state is off, then set the PSM pin low.
+  if(!this->powerState_)
+  {
+    gpio_put(this->psmPin_, 0);
   }
 }
 
@@ -112,3 +142,5 @@ int TriacDimmer::map(int x, int in_min, int in_max, int out_min, int out_max)
   // Example: map(50, 0, 100, 0, 255) will return 127.
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+
