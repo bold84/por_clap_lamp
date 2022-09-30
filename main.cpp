@@ -46,6 +46,8 @@ int main(int argc, char **argv)
   // Set the GPIO pin for the sound sensor 
   gpio_set_irq_enabled(SOUND_SENSOR_PIN, GPIO_IRQ_EDGE_FALL, true);
 
+  dimmer.setPowerState(false);
+
   // Loop forever.  
   while (1)
   {    
@@ -61,20 +63,20 @@ int main(int argc, char **argv)
       // If the clap count is 2, then increase the brightness. If the clap count is 3, then
       // decrease the brightness. If the clap count is 4, then turn off the light.
       if(clapCount == 2)
-      {
-        std::cout << "Increase dimming..." << std::endl;
-        dimmer.increaseDimPercentage();
-      }
-      else if(clapCount == 3)
-      {
-        std::cout << "Decrease dimming..." << std::endl;
-        dimmer.decreaseDimPercentage();
-      }
-      else if(clapCount == 4)
-      {
+      { 
         // Turn off the light.
         std::cout << "Turn the light on/off..." << std::endl;
         dimmer.setPowerState(!dimmer.getPowerState());
+      }
+      else if(dimmer.getPowerState() && clapCount == 3)
+      {
+        std::cout << "Increase dimming..." << std::endl;
+        dimmer.increaseDimPercentage(25);
+      }
+      else if(dimmer.getPowerState() && clapCount == 4)
+      {
+        std::cout << "Decrease dimming..." << std::endl;
+        dimmer.decreaseDimPercentage(25);
       }
     }
   }

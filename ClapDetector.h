@@ -64,7 +64,7 @@ public:
 private:
 
   int soundSensorPin_ { 0 };                      // The GPIO pin that is connected to the sound sensor.
-  int clapDebounceTime_ { 100 };                  // 100 ms
+  int clapDebounceTime_ { 150 };                  // 100 ms
   int clapSequenceTimeout_ { 1000 };              // 1 second
   uint32_t lastClapTime_ { 0 };                   // The time of the last clap.
   int clapCount_ { 0 };                           // The number of claps.

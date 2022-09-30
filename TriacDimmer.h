@@ -54,7 +54,7 @@ public:
    * 
    * @param dimPercentage The dim percentage.
    */
-  void setDimPercentage(uint8_t dimPercentage);
+  void setDimPercentage(int dimPercentage);
   
   /**
    * @brief Increase the dim percentage.

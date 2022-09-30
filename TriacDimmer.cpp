@@ -29,19 +29,20 @@ int TriacDimmer::getDimPercentage()
   return this->map(this->psmDuration_, MIN_PSM_DURATION, MAX_PSM_DURATION, 0, 100);
 }
 
-void TriacDimmer::setDimPercentage(uint8_t dimPercentage)
+void TriacDimmer::setDimPercentage(int dimPercentage)
 {
   // Set the PSM duration by converting the dim percentage to a PSM duration. But first
   // make sure the dim percentage is within the allowed range.
-  if(dimPercentage > 100)
+  if(dimPercentage > 75)
   {
-    dimPercentage = 100;
+    dimPercentage = 75;
   }
   else if(dimPercentage < 0)
   {
     dimPercentage = 0;
   }
   this->psmDuration_ = this->map(dimPercentage, 0, 100, MIN_PSM_DURATION, MAX_PSM_DURATION);
+  std::cout << "Percentage: " << int(dimPercentage) << "%, PSM: " << this->psmDuration_ << std::endl;
 }
 
 void TriacDimmer::increaseDimPercentage(int increasePct)
@@ -93,6 +94,7 @@ void TriacDimmer::setPowerState(bool power)
   // If the power state is off, then set the PSM pin low.
   if(!this->powerState_)
   {
+    this->setDimPercentage(0);
     gpio_put(this->psmPin_, 0);
   }
 }
